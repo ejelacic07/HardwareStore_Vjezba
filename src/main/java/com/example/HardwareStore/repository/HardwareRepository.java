@@ -1,7 +1,6 @@
 package com.example.HardwareStore.repository;
 
 import com.example.HardwareStore.domain.Hardware;
-import com.example.HardwareStore.dto.HardwareDTO;
 
 
 import java.util.List;
@@ -15,10 +14,9 @@ public interface HardwareRepository {
 
     List<Hardware> getAllHardware();
 
-
     List<Hardware> getHardwareByCode(String hardwareCode);
 
-    Integer saveNewHardware(Hardware hardware);
+    Hardware saveNewHardware(Hardware hardware);
 
     Optional<Hardware> updateHardware(Hardware hardwareToUpdate, Integer id);
 

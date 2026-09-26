@@ -2,12 +2,11 @@ package com.example.HardwareStore.controller;
 
 import com.example.HardwareStore.dto.HardwareDTO;
 import com.example.HardwareStore.service.HardwareService;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-
 
 import java.util.Collections;
 import java.util.List;
@@ -16,30 +15,30 @@ import java.util.List;
 
 @RestController
 @RequestMapping("hardware")
+@AllArgsConstructor
 public class HardwareController {
 
-    private final HardwareService hardwareService;
 
-    public HardwareController(HardwareService hardwareService) {
-        this.hardwareService = hardwareService;
-    }
+
+    private HardwareService hardwareService;
 
     @GetMapping
-    public List<HardwareDTO> getAll() {
-        return hardwareService.findAll();
+    public ResponseEntity<List<HardwareDTO>> findAll() {
+        return ResponseEntity.ok(hardwareService.findAll().stream().toList());
     }
-
 
     @GetMapping("/{hardwareCode}")
     public ResponseEntity<List<HardwareDTO>> filterHardwareByCode(@PathVariable String hardwareCode) {
-        return ResponseEntity.ok(Collections.singletonList(hardwareService.findByCode(hardwareCode)));
+        return ResponseEntity.ok(hardwareService.getHardwareByCode(hardwareCode));
     }
 
+
     @PostMapping("/new")
-    public ResponseEntity<Void> saveNewHardware(@Valid @RequestBody HardwareDTO hardwareDTO) {
-        hardwareService.saveNewHardware(hardwareDTO);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> saveNewHardware(@Valid @RequestBody HardwareDTO hardwareDTO) {
+           HardwareDTO savedHardwareDTO = hardwareService.saveNewHardware(hardwareDTO);
+           return ResponseEntity.ok(savedHardwareDTO);
     }
+
 
     @PutMapping("/{hardwareId}")
     public ResponseEntity<HardwareDTO> updateItem(@Valid @RequestBody HardwareDTO hardwareDTO, @PathVariable Integer hardwareId) {
@@ -52,9 +51,8 @@ public class HardwareController {
         }
     }
 
-
     @DeleteMapping("/delete/{hardwareId}")
-    public ResponseEntity<?> deleteArticle(@PathVariable Integer hardwareId) {
+    public ResponseEntity<?> deleteHardware(@PathVariable Integer hardwareId) {
         if (hardwareService.hardwareByIdExists(hardwareId)) {
             boolean result = hardwareService.deleteHardwareById(hardwareId);
             if (result) {

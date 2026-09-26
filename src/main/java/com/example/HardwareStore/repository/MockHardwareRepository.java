@@ -1,7 +1,7 @@
 package com.example.HardwareStore.repository;
 
 import com.example.HardwareStore.domain.Hardware;
-import com.example.HardwareStore.domain.Type;
+import com.example.HardwareStore.domain.ItemType;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ public class MockHardwareRepository implements HardwareRepository {
 
         hardwareList = new ArrayList<>();
 
-        Hardware firstHardware = new Hardware(1, "3437932", "AMD RYZEN 7", 400, Type.CPU, 5);
-        Hardware secondHardware = new Hardware(2, "4534325",  "Intel Core Ultra 7", 250, Type.CPU, 4);
-        Hardware thirdHardware = new Hardware(3, "4592351",  " G.Skill Trident Z5 RGB DDR5-6000", 600, Type.RAM, 7);
-        Hardware fourthHardware = new Hardware(4, "6789026",  "GeForce RTX 5090", 1900, Type.GPU, 12);
+        Hardware firstHardware = new Hardware(1, "3437932", "AMD RYZEN 7", 400, ItemType.CPU, 5);
+        Hardware secondHardware = new Hardware(2, "4534325",  "Intel Core Ultra 7", 250, ItemType.CPU, 4);
+        Hardware thirdHardware = new Hardware(3, "4592351",  " G.Skill Trident Z5 RGB DDR5-6000", 600, ItemType.RAM, 7);
+        Hardware fourthHardware = new Hardware(4, "6789026",  "GeForce RTX 5090", 1900, ItemType.GPU, 12);
 
         hardwareList.add(firstHardware);
         hardwareList.add(secondHardware);
@@ -36,21 +36,27 @@ public class MockHardwareRepository implements HardwareRepository {
         return hardwareList;
     }
 
-
     @Override
     public List<Hardware> getHardwareByCode(String hardwareCode) {
-        return hardwareList.stream()
-                .filter(a -> a.getCode().toLowerCase().contains(hardwareCode.toLowerCase()))
-                .collect(Collectors.toList());
+        return List.of();
     }
 
 
+//    @Override
+//    public List<Hardware> getHardwareByCode(String hardwareCode) {
+//        return hardwareList.stream()
+//                .filter(a -> a.getCode().toLowerCase().contains(hardwareCode.toLowerCase()))
+//                .collect(Collectors.toList());
+//    }
+
+
     @Override
-    public Integer saveNewHardware(Hardware hardware) {
-      Integer generatedId = hardwareList.size() + 1;
-      hardware.setId(generatedId);
-      hardwareList.add(hardware);
-      return generatedId;
+    public Hardware saveNewHardware(Hardware hardware) {
+//      Integer generatedId = hardwareList.size() + 1;
+//      hardware.setId(generatedId);
+//      hardwareList.add(hardware);
+//      return generatedId;
+        return hardware;
     }
 
 
@@ -93,9 +99,5 @@ public class MockHardwareRepository implements HardwareRepository {
     public boolean deleteHardwareById(Integer id) {
         return hardwareList.removeIf(hardware -> hardware.getId().equals(id));
     }
-
-
-
-
 
 }

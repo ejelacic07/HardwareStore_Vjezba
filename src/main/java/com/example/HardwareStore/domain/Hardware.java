@@ -3,7 +3,6 @@ package com.example.HardwareStore.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -15,7 +14,7 @@ public class Hardware {
     private String code;
     private String name;
     private  double price;
-    private Type type;
+    private ItemType type;
     private Integer amount;
 
 

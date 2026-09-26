@@ -11,7 +11,7 @@ public interface HardwareService {
 
     HardwareDTO findByCode(String code);
 
-    Integer saveNewHardware(HardwareDTO hardware);
+    HardwareDTO saveNewHardware(HardwareDTO hardware);
 
     Optional<HardwareDTO> updateHardware(HardwareDTO hardwareDTO, Integer id);
 
@@ -20,7 +20,5 @@ public interface HardwareService {
     boolean deleteHardwareById(Integer hardwareId);
 
 
-
-
-
+    List<HardwareDTO> getHardwareByCode(String hardwareCode);
 }

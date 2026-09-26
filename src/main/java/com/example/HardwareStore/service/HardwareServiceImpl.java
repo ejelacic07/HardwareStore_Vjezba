@@ -1,43 +1,44 @@
 package com.example.HardwareStore.service;
 
 import com.example.HardwareStore.domain.Hardware;
-import com.example.HardwareStore.domain.Type;
+import com.example.HardwareStore.domain.ItemType;
 import com.example.HardwareStore.dto.HardwareDTO;
 import com.example.HardwareStore.repository.HardwareRepository;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.Getter;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
+@Transactional
 public class HardwareServiceImpl implements HardwareService {
 
-    private final HardwareRepository hardwareRepository;
+    private HardwareRepository hardwareRepository;
 
-    public HardwareServiceImpl(HardwareRepository hardwareRepository) {
-        this.hardwareRepository = hardwareRepository;
-    }
 
     @Override
     public List<HardwareDTO> findAll() {
-        return hardwareRepository.findAll().stream().map(name -> new HardwareDTO(name)).collect(Collectors.toList());
+        return hardwareRepository.findAll().stream().
+                map(this::convertHardwareToDTO).
+                toList();
     }
 
     @Override
     public HardwareDTO findByCode(String code) {
-        return hardwareRepository.findByCode(code).map(name -> new HardwareDTO(name)).orElse(null);
+        return null;
     }
 
+
     @Override
-    public Integer saveNewHardware(HardwareDTO hardware) {
-        return hardwareRepository.saveNewHardware(convertHardwareDtoToHardware(hardware));
+    public HardwareDTO saveNewHardware(HardwareDTO hardware) {
+        return convertHardwareToDTO(hardwareRepository.saveNewHardware(convertHardwareDtoToHardware(hardware)));
     }
+
+
 
     @Override
     public Optional<HardwareDTO> updateHardware(HardwareDTO hardwareDTO, Integer id) {
@@ -49,15 +50,27 @@ public class HardwareServiceImpl implements HardwareService {
         return Optional.empty();
     }
 
+
+
     @Override
     public boolean hardwareByIdExists(Integer id) {
         return hardwareRepository.hardwareByIdExists(id);
     }
 
+
+
     @Override
     public boolean deleteHardwareById(Integer hardwareId) {
-        return  hardwareRepository.deleteHardwareById(hardwareId);
+        return hardwareRepository.deleteHardwareById(hardwareId);
     }
+
+    @Override
+    public List<HardwareDTO> getHardwareByCode(String hardwareCode) {
+        return hardwareRepository.getHardwareByCode(hardwareCode).stream()
+                .map(this::convertHardwareToDTO)
+                .toList();
+    }
+
 
     private Hardware convertHardwareDtoToHardware(HardwareDTO hardwareDTO) {
         Integer latestId =
@@ -66,7 +79,7 @@ public class HardwareServiceImpl implements HardwareService {
                         .get().getId();
 
         return new Hardware(latestId + 1, hardwareDTO.getCode(), hardwareDTO.getName(), hardwareDTO.getPrice(),
-                Type.valueOf(hardwareDTO.getType()) , hardwareDTO.getAmount());
+                ItemType.valueOf(hardwareDTO.getType()), hardwareDTO.getAmount());
     }
 
 
