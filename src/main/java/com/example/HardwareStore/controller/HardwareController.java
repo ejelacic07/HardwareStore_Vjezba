@@ -6,19 +6,17 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 
 
 @RestController
-@RequestMapping("hardware")
+@RequestMapping("/hardware")
 @AllArgsConstructor
 public class HardwareController {
-
-
 
     private HardwareService hardwareService;
 
@@ -26,6 +24,17 @@ public class HardwareController {
     public ResponseEntity<List<HardwareDTO>> findAll() {
         return ResponseEntity.ok(hardwareService.findAll().stream().toList());
     }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @GetMapping("/ping")
+    public String test() {
+        try {
+            return "Welcome";
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @GetMapping("/{hardwareCode}")
     public ResponseEntity<List<HardwareDTO>> filterHardwareByCode(@PathVariable String hardwareCode) {

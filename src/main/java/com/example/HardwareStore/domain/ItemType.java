@@ -1,26 +1,20 @@
 package com.example.HardwareStore.domain;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public enum ItemType {
+@NoArgsConstructor
+@Entity
+public class ItemType {
 
-    CPU(1, "CPU"),
-    GPU(2, "GPU"),
-    MBO(3, "MBO"),
-    RAM(4, "RAM"),
-    STORAGE(5, "STORAGE"),
-    OTHER(6, "OTHER");
-
-    private final Integer id;
-    private final String name;
-
-
-
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
 
 
 }
